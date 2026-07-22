@@ -1,0 +1,30 @@
+{
+  "name": "cse-341-project2",
+  "version": "1.0.0",
+  "description": "Library REST API for CSE 341 Project 2",
+  "main": "server.js",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "swagger": "node swagger.js",
+    "test": "node --test tests/validators.test.js",
+    "test:integration": "node scripts/smoke-test.js"
+  },
+  "keywords": [
+    "cse341",
+    "express",
+    "mongodb",
+    "rest-api"
+  ],
+  "author": "Alejandro Valladares",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongodb": "^7.4.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}

@@ -1,0 +1,97 @@
+@localUrl = http://localhost:3000
+@renderUrl = https://cse-341-project2.onrender.com
+@baseUrl = {{localUrl}}
+
+# Replace these after creating resources.
+@authorId = 64ac660864282d23d377e557
+@bookId = 64ac661564282d23d377e559
+
+### API information
+GET {{baseUrl}}/
+
+### Health check
+GET {{baseUrl}}/health
+
+### Swagger JSON
+GET {{baseUrl}}/swagger.json
+
+### Get all authors
+GET {{baseUrl}}/authors
+
+### Get one author
+GET {{baseUrl}}/authors/{{authorId}}
+
+### Create an author
+POST {{baseUrl}}/authors HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Austen",
+  "birthDate": "1775-12-16",
+  "nationality": "British",
+  "biography": "English novelist known for her social commentary and realism.",
+  "website": "https://example.com/authors/jane-austen"
+}
+
+### Replace an author
+PUT {{baseUrl}}/authors/{{authorId}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Austen",
+  "birthDate": "1775-12-16",
+  "nationality": "British",
+  "biography": "English novelist known for her social commentary, realism, and wit.",
+  "website": "https://example.com/authors/jane-austen"
+}
+
+### Delete an author (delete related books first)
+DELETE {{baseUrl}}/authors/{{authorId}}
+
+### Get all books
+GET {{baseUrl}}/books
+
+### Filter books by author
+GET {{baseUrl}}/books?authorId={{authorId}}
+
+### Get one book
+GET {{baseUrl}}/books/{{bookId}}
+
+### Create a book
+POST {{baseUrl}}/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Pride and Prejudice",
+  "isbn": "9780141439518",
+  "genre": "Classic fiction",
+  "publicationYear": 1813,
+  "publisher": "T. Egerton",
+  "language": "English",
+  "pageCount": 432,
+  "available": true,
+  "description": "A novel about manners, upbringing, morality, and marriage.",
+  "authorId": "{{authorId}}"
+}
+
+### Replace a book
+PUT {{baseUrl}}/books/{{bookId}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Pride and Prejudice",
+  "isbn": "9780141439518",
+  "genre": "Classic fiction",
+  "publicationYear": 1813,
+  "publisher": "Penguin Classics",
+  "language": "English",
+  "pageCount": 480,
+  "available": false,
+  "description": "A novel about manners, upbringing, morality, and marriage.",
+  "authorId": "{{authorId}}"
+}
+
+### Delete a book
+DELETE {{baseUrl}}/books/{{bookId}}
