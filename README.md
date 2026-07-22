@@ -2,6 +2,9 @@
 
 A REST API for managing books and authors in MongoDB. The project implements complete CRUD operations, request validation, centralized error handling, OpenAPI documentation, and deployment configuration for Render.
 
+- Live API: <https://project2-vxz5.onrender.com>
+- Swagger UI: <https://project2-vxz5.onrender.com/api-docs>
+
 ## Data model
 
 The API uses the `library_api` database and two collections:

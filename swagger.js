@@ -193,7 +193,7 @@ const doc = {
     },
     servers: [
         { url: 'http://localhost:3000', description: 'Local development' },
-        { url: 'https://cse-341-project2.onrender.com', description: 'Render deployment (update after creating the service)' }
+        { url: 'https://project2-vxz5.onrender.com', description: 'Render production deployment' }
     ],
     tags: [
         { name: 'Authors', description: 'Author CRUD operations' },

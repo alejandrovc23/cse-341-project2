@@ -1,5 +1,5 @@
 @localUrl = http://localhost:3000
-@renderUrl = https://cse-341-project2.onrender.com
+@renderUrl = https://project2-vxz5.onrender.com
 @baseUrl = {{localUrl}}
 
 # Replace these after creating resources.
