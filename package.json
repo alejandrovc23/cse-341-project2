@@ -10,7 +10,7 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "swagger": "node swagger.js",
-    "test": "node --test tests/validators.test.js",
+    "test": "node --test tests/validators.test.js tests/swagger.test.js",
     "test:integration": "node scripts/smoke-test.js"
   },
   "keywords": [

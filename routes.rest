@@ -1,6 +1,6 @@
 @localUrl = http://localhost:3000
 @renderUrl = https://project2-vxz5.onrender.com
-@baseUrl = {{localUrl}}
+@baseUrl = {{renderUrl}}
 
 # Replace these after creating resources.
 @authorId = 64ac660864282d23d377e557

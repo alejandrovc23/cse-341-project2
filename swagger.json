@@ -7,12 +7,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
-      "description": "Local development"
-    },
-    {
       "url": "https://project2-vxz5.onrender.com",
       "description": "Render production deployment"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development"
     }
   ],
   "tags": [
@@ -30,6 +30,50 @@
     }
   ],
   "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Get API information",
+        "responses": {
+          "200": {
+            "description": "API information returned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Library API"
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "1.0.0"
+                    },
+                    "documentation": {
+                      "type": "string",
+                      "example": "/api-docs"
+                    },
+                    "resources": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "/authors",
+                        "/books"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -82,6 +126,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -120,16 +167,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "A unique value already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Validation failed",
+                  "errors": [
+                    {
+                      "field": "title",
+                      "message": "Is required and must be a string"
+                    }
+                  ]
                 }
               }
             }
@@ -140,6 +186,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -158,11 +207,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "MongoDB ObjectId of the resource",
+            "description": "MongoDB ObjectId of the resource. Paste a real _id returned by a GET or POST request.",
             "schema": {
               "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "64ac660864282d23d377e557"
+              "pattern": "^[a-fA-F0-9]{24}$"
             }
           }
         ],
@@ -183,6 +231,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid id",
+                  "errors": [
+                    {
+                      "field": "id",
+                      "message": "Must be a valid MongoDB ObjectId"
+                    }
+                  ]
                 }
               }
             }
@@ -193,6 +250,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Author not found"
                 }
               }
             }
@@ -203,6 +263,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -219,11 +282,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "MongoDB ObjectId of the resource",
+            "description": "MongoDB ObjectId of the resource. Paste a real _id returned by a GET or POST request.",
             "schema": {
               "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "64ac660864282d23d377e557"
+              "pattern": "^[a-fA-F0-9]{24}$"
             }
           }
         ],
@@ -247,6 +309,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Validation failed",
+                  "errors": [
+                    {
+                      "field": "title",
+                      "message": "Is required and must be a string"
+                    }
+                  ]
                 }
               }
             }
@@ -257,16 +328,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "A unique value already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Author not found"
                 }
               }
             }
@@ -277,6 +341,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -294,11 +361,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "MongoDB ObjectId of the resource",
+            "description": "MongoDB ObjectId of the resource. Paste a real _id returned by a GET or POST request.",
             "schema": {
               "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "64ac660864282d23d377e557"
+              "pattern": "^[a-fA-F0-9]{24}$"
             }
           }
         ],
@@ -312,6 +378,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid id",
+                  "errors": [
+                    {
+                      "field": "id",
+                      "message": "Must be a valid MongoDB ObjectId"
+                    }
+                  ]
                 }
               }
             }
@@ -322,6 +397,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Author not found"
                 }
               }
             }
@@ -332,6 +410,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Author cannot be deleted while books still reference it"
                 }
               }
             }
@@ -342,6 +423,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -369,12 +453,34 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid authorId query parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Validation failed",
+                  "errors": [
+                    {
+                      "field": "authorId",
+                      "message": "Must be a valid MongoDB ObjectId"
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "500": {
             "description": "Unexpected server error",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -385,11 +491,10 @@
             "name": "authorId",
             "in": "query",
             "required": false,
-            "description": "Optionally filter books by author",
+            "description": "Optionally filter books by author. Leave this field empty to return every book.",
             "schema": {
               "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "64ac660864282d23d377e557"
+              "pattern": "^[a-fA-F0-9]{24}$"
             }
           }
         ]
@@ -426,6 +531,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Validation failed",
+                  "errors": [
+                    {
+                      "field": "title",
+                      "message": "Is required and must be a string"
+                    }
+                  ]
                 }
               }
             }
@@ -436,6 +550,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "A record with that isbn already exists",
+                  "errors": [
+                    {
+                      "field": "isbn",
+                      "message": "Must be unique"
+                    }
+                  ]
                 }
               }
             }
@@ -446,6 +569,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -464,11 +590,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "MongoDB ObjectId of the resource",
+            "description": "MongoDB ObjectId of the resource. Paste a real _id returned by a GET or POST request.",
             "schema": {
               "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "64ac660864282d23d377e557"
+              "pattern": "^[a-fA-F0-9]{24}$"
             }
           }
         ],
@@ -489,6 +614,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid id",
+                  "errors": [
+                    {
+                      "field": "id",
+                      "message": "Must be a valid MongoDB ObjectId"
+                    }
+                  ]
                 }
               }
             }
@@ -499,6 +633,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Book not found"
                 }
               }
             }
@@ -509,6 +646,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -525,11 +665,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "MongoDB ObjectId of the resource",
+            "description": "MongoDB ObjectId of the resource. Paste a real _id returned by a GET or POST request.",
             "schema": {
               "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "64ac660864282d23d377e557"
+              "pattern": "^[a-fA-F0-9]{24}$"
             }
           }
         ],
@@ -553,6 +692,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Validation failed",
+                  "errors": [
+                    {
+                      "field": "title",
+                      "message": "Is required and must be a string"
+                    }
+                  ]
                 }
               }
             }
@@ -563,6 +711,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Book not found"
                 }
               }
             }
@@ -573,6 +724,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "A record with that isbn already exists",
+                  "errors": [
+                    {
+                      "field": "isbn",
+                      "message": "Must be unique"
+                    }
+                  ]
                 }
               }
             }
@@ -583,6 +743,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -599,11 +762,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "MongoDB ObjectId of the resource",
+            "description": "MongoDB ObjectId of the resource. Paste a real _id returned by a GET or POST request.",
             "schema": {
               "type": "string",
-              "pattern": "^[a-fA-F0-9]{24}$",
-              "example": "64ac660864282d23d377e557"
+              "pattern": "^[a-fA-F0-9]{24}$"
             }
           }
         ],
@@ -617,6 +779,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid id",
+                  "errors": [
+                    {
+                      "field": "id",
+                      "message": "Must be a valid MongoDB ObjectId"
+                    }
+                  ]
                 }
               }
             }
@@ -627,6 +798,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Book not found"
                 }
               }
             }
@@ -637,6 +811,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "An unexpected server error occurred"
                 }
               }
             }
@@ -827,7 +1004,8 @@
           "authorId": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
-            "example": "64ac660864282d23d377e557"
+            "example": "64ac660864282d23d377e557",
+            "description": "MongoDB ObjectId of an existing author. Replace the example with a real author _id."
           }
         }
       },
@@ -902,7 +1080,8 @@
           "authorId": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
-            "example": "64ac660864282d23d377e557"
+            "example": "64ac660864282d23d377e557",
+            "description": "MongoDB ObjectId of an existing author. Replace the example with a real author _id."
           },
           "_id": {
             "type": "string",

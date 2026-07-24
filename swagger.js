@@ -1,17 +1,44 @@
 const fs = require('fs');
 const path = require('path');
 
-const objectId = {
+const objectIdSchema = {
     type: 'string',
-    pattern: '^[a-fA-F0-9]{24}$',
+    pattern: '^[a-fA-F0-9]{24}$'
+};
+
+const objectIdExample = {
+    ...objectIdSchema,
     example: '64ac660864282d23d377e557'
 };
 
-const errorResponse = (description) => ({
+const errorExamples = {
+    validation: {
+        message: 'Validation failed',
+        errors: [{ field: 'title', message: 'Is required and must be a string' }]
+    },
+    invalidId: {
+        message: 'Invalid id',
+        errors: [{ field: 'id', message: 'Must be a valid MongoDB ObjectId' }]
+    },
+    unique: {
+        message: 'A record with that isbn already exists',
+        errors: [{ field: 'isbn', message: 'Must be unique' }]
+    },
+    server: {
+        message: 'An unexpected server error occurred'
+    }
+};
+
+const notFoundExample = (resource) => ({
+    message: `${resource.charAt(0).toUpperCase()}${resource.slice(1)} not found`
+});
+
+const errorResponse = (description, example) => ({
     description,
     content: {
         'application/json': {
-            schema: { $ref: '#/components/schemas/Error' }
+            schema: { $ref: '#/components/schemas/Error' },
+            example
         }
     }
 });
@@ -27,11 +54,11 @@ const idParameter = {
     name: 'id',
     in: 'path',
     required: true,
-    description: 'MongoDB ObjectId of the resource',
-    schema: objectId
+    description: 'MongoDB ObjectId of the resource. Paste a real _id returned by a GET or POST request.',
+    schema: objectIdSchema
 };
 
-const buildCollectionPath = (tag, singular, schemaName) => ({
+const buildCollectionPath = (tag, singular, schemaName, options = {}) => ({
     get: {
         tags: [tag],
         summary: `Get all ${tag.toLowerCase()}`,
@@ -40,7 +67,7 @@ const buildCollectionPath = (tag, singular, schemaName) => ({
                 type: 'array',
                 items: { $ref: `#/components/schemas/${schemaName}` }
             }),
-            500: errorResponse('Unexpected server error')
+            500: errorResponse('Unexpected server error', errorExamples.server)
         }
     },
     post: {
@@ -58,9 +85,11 @@ const buildCollectionPath = (tag, singular, schemaName) => ({
             201: jsonResponse(`${singular} created successfully`, {
                 $ref: '#/components/schemas/CreatedResource'
             }),
-            400: errorResponse('Request validation failed'),
-            409: errorResponse('A unique value already exists'),
-            500: errorResponse('Unexpected server error')
+            400: errorResponse('Request validation failed', errorExamples.validation),
+            ...(options.unique ? {
+                409: errorResponse('A unique value already exists', errorExamples.unique)
+            } : {}),
+            500: errorResponse('Unexpected server error', errorExamples.server)
         }
     }
 });
@@ -68,13 +97,15 @@ const buildCollectionPath = (tag, singular, schemaName) => ({
 const buildItemPath = (tag, singular, schemaName, options = {}) => {
     const deleteResponses = {
         204: { description: `${singular} deleted successfully` },
-        400: errorResponse('Invalid MongoDB ObjectId'),
-        404: errorResponse(`${singular} not found`),
-        500: errorResponse('Unexpected server error')
+        400: errorResponse('Invalid MongoDB ObjectId', errorExamples.invalidId),
+        404: errorResponse(`${singular} not found`, notFoundExample(singular)),
+        500: errorResponse('Unexpected server error', errorExamples.server)
     };
 
     if (options.deleteConflict) {
-        deleteResponses[409] = errorResponse(options.deleteConflict);
+        deleteResponses[409] = errorResponse(options.deleteConflict, {
+            message: 'Author cannot be deleted while books still reference it'
+        });
     }
 
     return {
@@ -86,9 +117,9 @@ const buildItemPath = (tag, singular, schemaName, options = {}) => {
             200: jsonResponse(`${singular} retrieved successfully`, {
                 $ref: `#/components/schemas/${schemaName}`
             }),
-            400: errorResponse('Invalid MongoDB ObjectId'),
-            404: errorResponse(`${singular} not found`),
-            500: errorResponse('Unexpected server error')
+            400: errorResponse('Invalid MongoDB ObjectId', errorExamples.invalidId),
+            404: errorResponse(`${singular} not found`, notFoundExample(singular)),
+            500: errorResponse('Unexpected server error', errorExamples.server)
         }
     },
     put: {
@@ -105,10 +136,12 @@ const buildItemPath = (tag, singular, schemaName, options = {}) => {
         },
         responses: {
             204: { description: `${singular} updated successfully` },
-            400: errorResponse('Invalid ID or request validation failed'),
-            404: errorResponse(`${singular} not found`),
-            409: errorResponse('A unique value already exists'),
-            500: errorResponse('Unexpected server error')
+            400: errorResponse('Invalid ID or request validation failed', errorExamples.validation),
+            404: errorResponse(`${singular} not found`, notFoundExample(singular)),
+            ...(options.unique ? {
+                409: errorResponse('A unique value already exists', errorExamples.unique)
+            } : {}),
+            500: errorResponse('Unexpected server error', errorExamples.server)
         }
     },
     delete: {
@@ -174,12 +207,15 @@ const bookInput = {
             maxLength: 2000,
             example: 'A novel about manners, upbringing, morality, and marriage.'
         },
-        authorId: objectId
+        authorId: {
+            ...objectIdExample,
+            description: 'MongoDB ObjectId of an existing author. Replace the example with a real author _id.'
+        }
     }
 };
 
 const documentMetadata = {
-    _id: objectId,
+    _id: objectIdExample,
     createdAt: { type: 'string', format: 'date-time' },
     updatedAt: { type: 'string', format: 'date-time' }
 };
@@ -192,8 +228,8 @@ const doc = {
         description: 'REST API for managing authors and books in MongoDB. All create and update operations validate their complete request bodies.'
     },
     servers: [
-        { url: 'http://localhost:3000', description: 'Local development' },
-        { url: 'https://project2-vxz5.onrender.com', description: 'Render production deployment' }
+        { url: 'https://project2-vxz5.onrender.com', description: 'Render production deployment' },
+        { url: 'http://localhost:3000', description: 'Local development' }
     ],
     tags: [
         { name: 'Authors', description: 'Author CRUD operations' },
@@ -201,6 +237,27 @@ const doc = {
         { name: 'System', description: 'Service status' }
     ],
     paths: {
+        '/': {
+            get: {
+                tags: ['System'],
+                summary: 'Get API information',
+                responses: {
+                    200: jsonResponse('API information returned successfully', {
+                        type: 'object',
+                        properties: {
+                            name: { type: 'string', example: 'Library API' },
+                            version: { type: 'string', example: '1.0.0' },
+                            documentation: { type: 'string', example: '/api-docs' },
+                            resources: {
+                                type: 'array',
+                                items: { type: 'string' },
+                                example: ['/authors', '/books']
+                            }
+                        }
+                    })
+                }
+            }
+        },
         '/health': {
             get: {
                 tags: ['System'],
@@ -219,19 +276,29 @@ const doc = {
             deleteConflict: 'Books still reference this author'
         }),
         '/books': {
-            ...buildCollectionPath('Books', 'book', 'Book'),
+            ...buildCollectionPath('Books', 'book', 'Book', { unique: true }),
             get: {
-                ...buildCollectionPath('Books', 'book', 'Book').get,
+                ...buildCollectionPath('Books', 'book', 'Book', { unique: true }).get,
                 parameters: [{
                     name: 'authorId',
                     in: 'query',
                     required: false,
-                    description: 'Optionally filter books by author',
-                    schema: objectId
-                }]
+                    description: 'Optionally filter books by author. Leave this field empty to return every book.',
+                    schema: objectIdSchema
+                }],
+                responses: {
+                    ...buildCollectionPath('Books', 'book', 'Book', { unique: true }).get.responses,
+                    400: errorResponse('Invalid authorId query parameter', {
+                        message: 'Validation failed',
+                        errors: [{
+                            field: 'authorId',
+                            message: 'Must be a valid MongoDB ObjectId'
+                        }]
+                    })
+                }
             }
         },
-        '/books/{id}': buildItemPath('Books', 'book', 'Book')
+        '/books/{id}': buildItemPath('Books', 'book', 'Book', { unique: true })
     },
     components: {
         schemas: {
@@ -252,7 +319,7 @@ const doc = {
             CreatedResource: {
                 type: 'object',
                 required: ['id'],
-                properties: { id: objectId }
+                properties: { id: objectIdExample }
             },
             ValidationError: {
                 type: 'object',
