@@ -30,3 +30,13 @@ test('documents resource-specific conflict and validation responses', () => {
     assert.ok(swagger.paths['/books'].get.responses['400']);
     assert.ok(swagger.paths['/authors/{id}'].delete.responses['409']);
 });
+
+test('provides executable demonstration examples for Swagger', () => {
+    const authorProperties = swagger.components.schemas.AuthorInput.properties;
+    const bookProperties = swagger.components.schemas.BookInput.properties;
+
+    assert.equal(authorProperties.firstName.example, 'Video');
+    assert.equal(authorProperties.lastName.example, 'Author');
+    assert.match(bookProperties.authorId.example, /^[a-f0-9]{24}$/);
+    assert.equal(bookProperties.title.example, 'Video Demo Book');
+});

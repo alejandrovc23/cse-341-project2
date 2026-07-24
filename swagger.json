@@ -840,35 +840,35 @@
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "Jane"
+            "example": "Video"
           },
           "lastName": {
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "Austen"
+            "example": "Author"
           },
           "birthDate": {
             "type": "string",
             "format": "date",
-            "example": "1775-12-16"
+            "example": "1990-01-01"
           },
           "nationality": {
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "British"
+            "example": "American"
           },
           "biography": {
             "type": "string",
             "minLength": 10,
             "maxLength": 2000,
-            "example": "English novelist known for her social commentary."
+            "example": "Temporary author created during the CSE 341 demonstration video."
           },
           "website": {
             "type": "string",
             "format": "uri",
-            "example": "https://example.com/authors/jane-austen"
+            "example": "https://example.com/video-author"
           }
         }
       },
@@ -891,35 +891,35 @@
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "Jane"
+            "example": "Video"
           },
           "lastName": {
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "Austen"
+            "example": "Author"
           },
           "birthDate": {
             "type": "string",
             "format": "date",
-            "example": "1775-12-16"
+            "example": "1990-01-01"
           },
           "nationality": {
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "British"
+            "example": "American"
           },
           "biography": {
             "type": "string",
             "minLength": 10,
             "maxLength": 2000,
-            "example": "English novelist known for her social commentary."
+            "example": "Temporary author created during the CSE 341 demonstration video."
           },
           "website": {
             "type": "string",
             "format": "uri",
-            "example": "https://example.com/authors/jane-austen"
+            "example": "https://example.com/video-author"
           },
           "_id": {
             "type": "string",
@@ -956,28 +956,28 @@
             "type": "string",
             "minLength": 2,
             "maxLength": 200,
-            "example": "Pride and Prejudice"
+            "example": "Video Demo Book"
           },
           "isbn": {
             "type": "string",
-            "example": "9780141439518"
+            "example": "9782026072301"
           },
           "genre": {
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "Classic fiction"
+            "example": "Educational"
           },
           "publicationYear": {
             "type": "integer",
             "minimum": 1000,
-            "example": 1813
+            "example": 2026
           },
           "publisher": {
             "type": "string",
             "minLength": 2,
             "maxLength": 150,
-            "example": "T. Egerton"
+            "example": "BYU-I Demo Press"
           },
           "language": {
             "type": "string",
@@ -989,7 +989,7 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 100000,
-            "example": 432
+            "example": 200
           },
           "available": {
             "type": "boolean",
@@ -999,13 +999,13 @@
             "type": "string",
             "minLength": 10,
             "maxLength": 2000,
-            "example": "A novel about manners, upbringing, morality, and marriage."
+            "example": "Temporary book created during the CSE 341 demonstration video."
           },
           "authorId": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
-            "example": "64ac660864282d23d377e557",
-            "description": "MongoDB ObjectId of an existing author. Replace the example with a real author _id."
+            "example": "6a611c8b0ab8471bd61f3fd6",
+            "description": "MongoDB ObjectId of the existing Jane Austen record. This example can be executed as-is."
           }
         }
       },
@@ -1032,28 +1032,28 @@
             "type": "string",
             "minLength": 2,
             "maxLength": 200,
-            "example": "Pride and Prejudice"
+            "example": "Video Demo Book"
           },
           "isbn": {
             "type": "string",
-            "example": "9780141439518"
+            "example": "9782026072301"
           },
           "genre": {
             "type": "string",
             "minLength": 2,
             "maxLength": 80,
-            "example": "Classic fiction"
+            "example": "Educational"
           },
           "publicationYear": {
             "type": "integer",
             "minimum": 1000,
-            "example": 1813
+            "example": 2026
           },
           "publisher": {
             "type": "string",
             "minLength": 2,
             "maxLength": 150,
-            "example": "T. Egerton"
+            "example": "BYU-I Demo Press"
           },
           "language": {
             "type": "string",
@@ -1065,7 +1065,7 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 100000,
-            "example": 432
+            "example": 200
           },
           "available": {
             "type": "boolean",
@@ -1075,13 +1075,13 @@
             "type": "string",
             "minLength": 10,
             "maxLength": 2000,
-            "example": "A novel about manners, upbringing, morality, and marriage."
+            "example": "Temporary book created during the CSE 341 demonstration video."
           },
           "authorId": {
             "type": "string",
             "pattern": "^[a-fA-F0-9]{24}$",
-            "example": "64ac660864282d23d377e557",
-            "description": "MongoDB ObjectId of an existing author. Replace the example with a real author _id."
+            "example": "6a611c8b0ab8471bd61f3fd6",
+            "description": "MongoDB ObjectId of the existing Jane Austen record. This example can be executed as-is."
           },
           "_id": {
             "type": "string",

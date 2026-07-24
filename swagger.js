@@ -159,20 +159,20 @@ const authorInput = {
     additionalProperties: false,
     required: ['firstName', 'lastName', 'birthDate', 'nationality', 'biography', 'website'],
     properties: {
-        firstName: { type: 'string', minLength: 2, maxLength: 80, example: 'Jane' },
-        lastName: { type: 'string', minLength: 2, maxLength: 80, example: 'Austen' },
-        birthDate: { type: 'string', format: 'date', example: '1775-12-16' },
-        nationality: { type: 'string', minLength: 2, maxLength: 80, example: 'British' },
+        firstName: { type: 'string', minLength: 2, maxLength: 80, example: 'Video' },
+        lastName: { type: 'string', minLength: 2, maxLength: 80, example: 'Author' },
+        birthDate: { type: 'string', format: 'date', example: '1990-01-01' },
+        nationality: { type: 'string', minLength: 2, maxLength: 80, example: 'American' },
         biography: {
             type: 'string',
             minLength: 10,
             maxLength: 2000,
-            example: 'English novelist known for her social commentary.'
+            example: 'Temporary author created during the CSE 341 demonstration video.'
         },
         website: {
             type: 'string',
             format: 'uri',
-            example: 'https://example.com/authors/jane-austen'
+            example: 'https://example.com/video-author'
         }
     }
 };
@@ -193,23 +193,24 @@ const bookInput = {
         'authorId'
     ],
     properties: {
-        title: { type: 'string', minLength: 2, maxLength: 200, example: 'Pride and Prejudice' },
-        isbn: { type: 'string', example: '9780141439518' },
-        genre: { type: 'string', minLength: 2, maxLength: 80, example: 'Classic fiction' },
-        publicationYear: { type: 'integer', minimum: 1000, example: 1813 },
-        publisher: { type: 'string', minLength: 2, maxLength: 150, example: 'T. Egerton' },
+        title: { type: 'string', minLength: 2, maxLength: 200, example: 'Video Demo Book' },
+        isbn: { type: 'string', example: '9782026072301' },
+        genre: { type: 'string', minLength: 2, maxLength: 80, example: 'Educational' },
+        publicationYear: { type: 'integer', minimum: 1000, example: 2026 },
+        publisher: { type: 'string', minLength: 2, maxLength: 150, example: 'BYU-I Demo Press' },
         language: { type: 'string', minLength: 2, maxLength: 50, example: 'English' },
-        pageCount: { type: 'integer', minimum: 1, maximum: 100000, example: 432 },
+        pageCount: { type: 'integer', minimum: 1, maximum: 100000, example: 200 },
         available: { type: 'boolean', example: true },
         description: {
             type: 'string',
             minLength: 10,
             maxLength: 2000,
-            example: 'A novel about manners, upbringing, morality, and marriage.'
+            example: 'Temporary book created during the CSE 341 demonstration video.'
         },
         authorId: {
-            ...objectIdExample,
-            description: 'MongoDB ObjectId of an existing author. Replace the example with a real author _id.'
+            ...objectIdSchema,
+            example: '6a611c8b0ab8471bd61f3fd6',
+            description: 'MongoDB ObjectId of the existing Jane Austen record. This example can be executed as-is.'
         }
     }
 };
