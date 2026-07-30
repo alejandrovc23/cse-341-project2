@@ -16,6 +16,27 @@ test('documents every CRUD operation for authors and books', () => {
     }
 });
 
+test('documents GitHub OAuth, session status, and logout', () => {
+    assert.ok(swagger.paths['/auth/github'].get);
+    assert.ok(swagger.paths['/auth/github/callback'].get);
+    assert.ok(swagger.paths['/auth/status'].get);
+    assert.ok(swagger.paths['/auth/logout'].post);
+    assert.ok(swagger.components.securitySchemes.cookieAuth);
+});
+
+test('protects every mutating author and book operation in Swagger', () => {
+    for (const resource of ['authors', 'books']) {
+        for (const operation of [
+            swagger.paths[`/${resource}`].post,
+            swagger.paths[`/${resource}/{id}`].put,
+            swagger.paths[`/${resource}/{id}`].delete
+        ]) {
+            assert.deepEqual(operation.security, [{ cookieAuth: [] }]);
+            assert.ok(operation.responses['401']);
+        }
+    }
+});
+
 test('does not prefill the optional books authorId filter', () => {
     const authorIdParameter = swagger.paths['/books'].get.parameters
         .find((parameter) => parameter.name === 'authorId');

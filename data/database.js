@@ -25,7 +25,11 @@ const initDb = async () => {
     await Promise.all([
         database.collection('books').createIndex({ isbn: 1 }, { unique: true }),
         database.collection('books').createIndex({ authorId: 1 }),
-        database.collection('authors').createIndex({ lastName: 1, firstName: 1 })
+        database.collection('authors').createIndex({ lastName: 1, firstName: 1 }),
+        database.collection('users').createIndex(
+            { provider: 1, providerId: 1 },
+            { unique: true }
+        )
     ]);
 
     return database;

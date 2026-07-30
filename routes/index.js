@@ -5,8 +5,9 @@ const swaggerDocument = require('../swagger.json');
 router.get('/', (req, res) => {
     res.status(200).json({
         name: 'Library API',
-        version: '1.0.0',
+        version: '2.0.0',
         documentation: '/api-docs',
+        authentication: '/auth/status',
         resources: ['/authors', '/books']
     });
 });
@@ -16,7 +17,13 @@ router.get('/health', (req, res) => {
 });
 
 router.get('/swagger.json', (req, res) => res.status(200).json(swaggerDocument));
-router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+        persistAuthorization: true,
+        withCredentials: true
+    }
+}));
+router.use('/auth', require('./auth'));
 router.use('/authors', require('./authors'));
 router.use('/books', require('./books'));
 
