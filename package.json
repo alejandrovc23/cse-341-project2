@@ -10,7 +10,7 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "swagger": "node swagger.js",
-    "test": "node --test tests/validators.test.js tests/swagger.test.js",
+    "test": "node --test tests/validators.test.js tests/swagger.test.js tests/auth.test.js",
     "test:integration": "node scripts/smoke-test.js"
   },
   "keywords": [
@@ -22,9 +22,13 @@
   "author": "Alejandro Valladares",
   "license": "ISC",
   "dependencies": {
+    "connect-mongo": "^6.0.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "mongodb": "^7.4.0",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
     "swagger-ui-express": "^5.0.1"
   }
 }

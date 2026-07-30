@@ -15,6 +15,17 @@ GET {{baseUrl}}/health
 ### Swagger JSON
 GET {{baseUrl}}/swagger.json
 
+### Authentication status
+GET {{baseUrl}}/auth/status
+
+### GitHub login / account creation
+# Open this URL in the same browser as Swagger UI, then use Swagger for protected requests:
+# https://project2-vxz5.onrender.com/auth/github
+GET {{baseUrl}}/auth/github
+
+### Logout (requires the library.sid session cookie)
+POST {{baseUrl}}/auth/logout
+
 ### Get all authors
 GET {{baseUrl}}/authors
 

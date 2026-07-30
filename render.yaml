@@ -9,7 +9,17 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 22
+      - key: NODE_ENV
+        value: production
+      - key: BASE_URL
+        value: https://project2-vxz5.onrender.com
       - key: MONGODB_URL
         sync: false
       - key: MONGODB_DATABASE
         value: library_api
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false

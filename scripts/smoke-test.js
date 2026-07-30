@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const { ObjectId } = require('mongodb');
 const mongodb = require('../data/database');
 const { app } = require('../server');
+const requireAuth = require('../middleware/requireAuth');
 
 let server;
 let authorId;
@@ -28,6 +29,29 @@ const run = async () => {
     let result = await request(baseUrl, '/health');
     assert.equal(result.response.status, 200);
 
+    result = await request(baseUrl, '/auth/status');
+    assert.equal(result.response.status, 200);
+    assert.equal(result.body.authenticated, false);
+
+    result = await request(baseUrl, '/auth/logout', { method: 'POST' });
+    assert.equal(result.response.status, 401);
+
+    result = await request(baseUrl, '/authors', {
+        method: 'POST',
+        headers: jsonHeaders,
+        body: JSON.stringify({})
+    });
+    assert.equal(result.response.status, 401);
+
+    app.locals.requireAuth = (req, res, next) => next();
+
+    result = await request(baseUrl, '/authors', {
+        method: 'POST',
+        headers: jsonHeaders,
+        body: JSON.stringify({ firstName: 'Incomplete' })
+    });
+    assert.equal(result.response.status, 400);
+
     result = await request(baseUrl, '/authors', {
         method: 'POST',
         headers: jsonHeaders,
@@ -45,6 +69,13 @@ const run = async () => {
 
     result = await request(baseUrl, `/authors/${authorId}`);
     assert.equal(result.response.status, 200);
+
+    result = await request(baseUrl, `/authors/${authorId}`, {
+        method: 'PUT',
+        headers: jsonHeaders,
+        body: JSON.stringify({ lastName: 'Incomplete' })
+    });
+    assert.equal(result.response.status, 400);
 
     result = await request(baseUrl, '/books', {
         method: 'POST',
@@ -81,6 +112,13 @@ const run = async () => {
     result = await request(baseUrl, `/books/${bookId}`, {
         method: 'PUT',
         headers: jsonHeaders,
+        body: JSON.stringify({ ...bookInput, pageCount: 0 })
+    });
+    assert.equal(result.response.status, 400);
+
+    result = await request(baseUrl, `/books/${bookId}`, {
+        method: 'PUT',
+        headers: jsonHeaders,
         body: JSON.stringify({ ...bookInput, available: false })
     });
     assert.equal(result.response.status, 204);
@@ -99,7 +137,7 @@ const run = async () => {
     result = await request(baseUrl, `/books/${new ObjectId()}`);
     assert.equal(result.response.status, 404);
 
-    console.log('Integration smoke test passed: CRUD, validation, relationships, and errors work against MongoDB.');
+    console.log('Integration smoke test passed: auth guard, CRUD, POST/PUT validation, relationships, and errors work against MongoDB.');
 };
 
 const cleanup = async () => {
@@ -111,9 +149,11 @@ const cleanup = async () => {
             await mongodb.getDatabase().collection('authors').deleteOne({ _id: new ObjectId(authorId) });
         }
     } finally {
+        app.locals.requireAuth = requireAuth;
         if (server) {
             await new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
         }
+        await app.locals.sessionStore.close();
         await mongodb.closeDb();
     }
 };
