@@ -140,7 +140,6 @@ Use `npm install` as the build command and `npm start` as the start command. Aft
 
 ## Week 4 demonstration checklist
 
-- Follow the timed [video demonstration script](VIDEO_DEMO.md) to cover every rubric item in 5–8 minutes.
 - Show `/auth/status` before and after GitHub login.
 - Show the new `users` document and existing `authors` and `books` collections in MongoDB Compass.
 - Show at least one protected route returning `401` while logged out.
